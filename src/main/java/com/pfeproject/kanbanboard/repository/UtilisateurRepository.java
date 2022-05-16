@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Integer>, JpaSpecificationExecutor<Utilisateur> {
-    @Query("select a from Utilisateur a where a.firstName = :name")
-    Utilisateur getUserByName(@Param("name") String name);
+    @Query(value = "select * from Utilisateur where USERNAME = :username", nativeQuery = true)
+    Utilisateur getUserByUsername(@Param("username") String username);
 
 }

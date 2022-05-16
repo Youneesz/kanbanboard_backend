@@ -26,8 +26,10 @@ public class TagController {
     }
 
     @PutMapping("/update/{id}")
-    public Tag update(@PathVariable int id, @RequestBody Map<String, String> body) {
-        Tag modified = new Tag(body.get("NAME_TAG"));
+    public Tag update(@PathVariable int id, @RequestBody Tag tag) {
+        Tag modified = tagService.getTag(id);
+        modified.setNameTag(tag.getNameTag());
+        modified.setTaches(tag.getTaches());
         return tagService.addTag(modified);
     }
 

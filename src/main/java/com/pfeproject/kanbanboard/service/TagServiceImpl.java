@@ -46,9 +46,9 @@ public class TagServiceImpl implements TagService{
 
     @Override
     public Tag addTag(Tag new_tag) {
-        /*if (containsName(getTags(), new_tag.getNameTag())) {
+        if (containsName(getTags(), new_tag.getNameTag())) {
             return null;
-        }*/
+        }
         return tagRepository.save(new_tag);
     }
 }

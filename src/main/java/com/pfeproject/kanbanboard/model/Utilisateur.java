@@ -1,13 +1,17 @@
 package com.pfeproject.kanbanboard.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "utilisateur")
-public class Utilisateur implements Serializable {
+public class Utilisateur implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -16,17 +20,14 @@ public class Utilisateur implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUser;
 
-    @Column(name = "BIRTHDATE")
-    private Date BIRTHDATE;
-
-    @Column(name = "JOINDATE")
-    private Date JOINDATE;
-
     @Column(name = "FIRST_NAME")
     private String firstName;
 
     @Column(name = "LAST_NAME")
     private String lastName;
+
+    @Column(name = "USERNAME")
+    private String username;
 
     @Column(name = "EMAIL")
     private String email;
@@ -34,16 +35,30 @@ public class Utilisateur implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-    private List<Session> sessions;
+    @Column(name = "BIRTHDATE")
+    private Date birthdate;
+
+    @Column(name = "JOINDATE")
+    private Date joindate;
+
+    @Column(name = "PICTURE")
+    private String pfp;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Session> session_user;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL, CascadeType.ALL})
+    @JoinTable(name = "work_on", joinColumns = {@JoinColumn(name = "ID_USER")}, inverseJoinColumns = {@JoinColumn(name = "ID_TASK")})
+    private List<Tache> taches;
 
     public Utilisateur() {}
 
-    public Utilisateur(Date birthdate, Date joindate, String firstName, String lastName, String email, String password) {
-        BIRTHDATE = birthdate;
-        JOINDATE = joindate;
+    public Utilisateur(Date birthdate, Date joindate, String firstName, String lastName, String username, String email, String password) {
+        this.birthdate = birthdate;
+        this.joindate = joindate;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -57,19 +72,19 @@ public class Utilisateur implements Serializable {
     }
 
     public Date getBIRTHDATE() {
-        return BIRTHDATE;
+        return birthdate;
     }
 
     public void setBIRTHDATE(Date BIRTHDATE) {
-        this.BIRTHDATE = BIRTHDATE;
+        this.birthdate = BIRTHDATE;
     }
 
     public Date getJOINDATE() {
-        return JOINDATE;
+        return joindate;
     }
 
     public void setJOINDATE(Date JOINDATE) {
-        this.JOINDATE = JOINDATE;
+        this.joindate = JOINDATE;
     }
 
     public String getFirstName() {
@@ -88,6 +103,14 @@ public class Utilisateur implements Serializable {
         this.lastName = lastName;
     }
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -96,6 +119,7 @@ public class Utilisateur implements Serializable {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -104,25 +128,44 @@ public class Utilisateur implements Serializable {
         this.password = password;
     }
 
-    public List<Session> getSessions() {
-        return sessions;
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
     }
 
-    public void setSessions(List<Session> sessions) {
-        this.sessions = sessions;
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
     }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
+
 
     @Override
     public String toString() {
         return "Utilisateur{" +
                 "idUser=" + idUser +
-                ", BIRTHDATE=" + BIRTHDATE +
-                ", JOINDATE=" + JOINDATE +
+                ", BIRTHDATE=" + birthdate +
+                ", JOINDATE=" + joindate +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", sessions=" + sessions +
+                ", password='" + password +
                 '}';
     }
 }

@@ -2,6 +2,8 @@ package com.pfeproject.kanbanboard.service;
 
 import com.pfeproject.kanbanboard.model.Section;
 import com.pfeproject.kanbanboard.repository.SectionRepository;
+import com.pfeproject.kanbanboard.repository.SessionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,10 +11,15 @@ import java.util.List;
 @Service
 public class SectionServiceImpl implements SectionService{
 
+    @Autowired
     private final SectionRepository sectionRepository;
 
-    public SectionServiceImpl(SectionRepository sectionRepository) {
+    @Autowired
+    private final SessionRepository sessionRepository;
+
+    public SectionServiceImpl(SectionRepository sectionRepository, SessionRepository sessionRepository) {
         this.sectionRepository = sectionRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public static boolean containsName(List<Section> sections, String name) {
@@ -35,6 +42,9 @@ public class SectionServiceImpl implements SectionService{
 
     @Override
     public Section updateSection(int id, Section updated) {
+        Section nv = getSection(id);
+        nv.setNameSection(updated.getNameSection());
+        nv.setSession(updated.getSession());
         return sectionRepository.save(updated);
     }
 
@@ -51,7 +61,7 @@ public class SectionServiceImpl implements SectionService{
 
     @Override
     public Section addSection(Section new_Section) {
-        if (containsName(getSections(), new_Section.getNameSection())) {
+        if (containsName(getSections(), new_Section.getNameSection()) || sessionRepository.findAll().stream().noneMatch(e -> e.getIdSession() == new_Section.getSession().getIdSession())) {
             return null;
         }
         return sectionRepository.save(new_Section);
