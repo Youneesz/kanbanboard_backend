@@ -2,6 +2,7 @@ package com.pfeproject.kanbanboard.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,12 @@ public class Tache implements Serializable {
 
     @Column(name = "COLOR_TASK")
     private String colorTask;
+
+    @Column(name = "START_DATE")
+    private Date startDate;
+
+    @Column(name = "FINISH_DATE")
+    private Date finishDate;
 
     @ManyToOne
     @JoinColumn(name = "id_section")

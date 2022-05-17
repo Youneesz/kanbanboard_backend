@@ -47,7 +47,7 @@ public class Utilisateur implements Serializable, UserDetails {
     @ManyToMany(mappedBy = "users")
     private List<Session> session_user;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL, CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "work_on", joinColumns = {@JoinColumn(name = "ID_USER")}, inverseJoinColumns = {@JoinColumn(name = "ID_TASK")})
     private List<Tache> taches;
 

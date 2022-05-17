@@ -24,7 +24,7 @@ public class TacheServiceImpl implements TacheService {
 
     @Override
     public Tache addTache(Tache tache) {
-        if (getTaches().stream().anyMatch(e -> Objects.equals(e.getNameTask(), tache.getNameTask()))  ||sectionRepository.findAll().stream().noneMatch(e -> e.getIdSection() == tache.getSection().getIdSection())) {
+        if (getTaches().stream().anyMatch(e -> Objects.equals(e.getNameTask(), tache.getNameTask()))  || sectionRepository.findAll().stream().noneMatch(e -> e.getIdSection() == tache.getSection().getIdSection())) {
             return null;
         }
         return tacheRepository.save(tache);
@@ -32,6 +32,9 @@ public class TacheServiceImpl implements TacheService {
 
     @Override
     public Tache updateTache(int id, Tache updated) {
+        if (sectionRepository.findAll().stream().noneMatch(e -> e.getIdSection() == updated.getSection().getIdSection())) {
+            return null;
+        }
         Tache nv = getTache(id);
         nv.setNameTask(updated.getNameTask());
         nv.setDescriptionTask(updated.getDescriptionTask());
