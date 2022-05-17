@@ -24,7 +24,7 @@ public class TacheServiceImpl implements TacheService {
 
     @Override
     public Tache addTache(Tache tache) {
-        if (getTaches().stream().anyMatch(e -> Objects.equals(e.getNameTask(), tache.getNameTask()))  || sectionRepository.findAll().stream().noneMatch(e -> e.getIdSection() == tache.getSection().getIdSection())) {
+        if (tacheRepository.getTachesBySection(tache.getSection().getIdSection()).stream().anyMatch(e -> e.getNameTask().equals(tache.getNameTask()))) {
             return null;
         }
         return tacheRepository.save(tache);

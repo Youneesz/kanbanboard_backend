@@ -18,8 +18,8 @@ public class Section implements Serializable {
     @Column(name = "NAME_SECTION", nullable = false)
     private String nameSection;
 
-    /*@OneToMany(mappedBy = "section")
-    private List<Tache> taches;*/
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+    private List<Tache> taches;
 
     @ManyToOne
     @JoinColumn(name = "id_session")
@@ -47,13 +47,13 @@ public class Section implements Serializable {
         this.nameSection = nameSection;
     }
 
-   /* public List<Tache> getTaches() {
+    public List<Tache> getTaches() {
         return taches;
     }
 
     public void setTaches(List<Tache> taches) {
         this.taches = taches;
-    }*/
+    }
 
     public Session getSession() {
         return session;

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SectionServiceImpl implements SectionService{
@@ -42,6 +43,14 @@ public class SectionServiceImpl implements SectionService{
 
     @Override
     public Section updateSection(int id, Section updated) {
+        List<Section> sections = sectionRepository.getSectionsBySession(getSection(id).getSession().getIdSession());
+        for (Section sec:sections) {
+            if (sec.getIdSection() != id) {
+                if (Objects.equals(sec.getNameSection(), updated.getNameSection())) {
+                    return null;
+                }
+            }
+        }
         Section nv = getSection(id);
         nv.setNameSection(updated.getNameSection());
         nv.setSession(updated.getSession());
@@ -61,7 +70,8 @@ public class SectionServiceImpl implements SectionService{
 
     @Override
     public Section addSection(Section new_Section) {
-        if (containsName(getSections(), new_Section.getNameSection()) || sessionRepository.findAll().stream().noneMatch(e -> e.getIdSession() == new_Section.getSession().getIdSession())) {
+        if (sectionRepository.getSectionByNameSectionPerSession(new_Section.getSession().getIdSession(), new_Section.getNameSection()) != null || sessionRepository.findById(new_Section.getSession().getIdSession()).isEmpty())
+        {
             return null;
         }
         return sectionRepository.save(new_Section);

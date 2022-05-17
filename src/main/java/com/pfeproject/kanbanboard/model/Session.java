@@ -1,5 +1,7 @@
 package com.pfeproject.kanbanboard.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -21,8 +23,8 @@ public class Session implements Serializable {
     @Column(name = "DESCRIPTION_SESSION")
     private String descSession;
 
-    /*@OneToMany(mappedBy = "session")
-    private List<Section> sections;*/
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    private List<Section> sections;
 
     @ManyToOne
     @JoinColumn(name = "id_user")

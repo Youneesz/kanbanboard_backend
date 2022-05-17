@@ -3,12 +3,10 @@ package com.pfeproject.kanbanboard.service;
 import com.pfeproject.kanbanboard.model.Utilisateur;
 import com.pfeproject.kanbanboard.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
@@ -30,11 +28,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public Utilisateur updateUser(int id, Utilisateur updated) {
+        List<Utilisateur> users = getUsers();
+        for (Utilisateur user:users) {
+            if (!Objects.equals(user.getIdUser(), id)) {
+                if (Objects.equals(user.getEmail().toLowerCase(), updated.getEmail().toLowerCase()) || Objects.equals(user.getUsername().toLowerCase(), updated.getUsername().toLowerCase())) {
+                    return null;
+                }
+            }
+        }
         Utilisateur util = utilisateurRepository.findById(getUser(id).getIdUser()).orElseThrow(RuntimeException::new);
         util.setBIRTHDATE(updated.getBIRTHDATE());
         util.setEmail(updated.getEmail());
         util.setFirstName(updated.getFirstName());
         util.setLastName(updated.getLastName());
+        util.setUsername(updated.getUsername());
         util.setPassword(updated.getPassword());
         util.setJOINDATE(updated.getJOINDATE());
         return utilisateurRepository.save(util);

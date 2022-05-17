@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SessionServiceImpl implements SessionService{
@@ -22,15 +23,22 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
     public Session addSession(Session session) {
-        if (getSessions().stream().noneMatch(e -> e.getNameSession().equals(session.getNameSession())) || utilisateurRepository.findAll().stream().anyMatch(e -> e.getIdUser() == session.getOwner().getIdUser())) {
-            session.setOwner(session.getOwner());
-            return sessionRepository.save(session);
+        if (sessionRepository.getSessionName(session.getNameSession(), session.getOwner().getIdUser()) != null)  {
+            return null;
         }
-        return null;
+        return sessionRepository.save(session);
     }
 
     @Override
     public Session updateSession(int id, Session updated) {
+        List<Session> userSessions = sessionRepository.getOwnerSessions(updated.getOwner().getIdUser());
+        for (Session session:userSessions) {
+            if (session.getIdSession() != id) {
+                if (Objects.equals(session.getNameSession(), updated.getNameSession())) {
+                    return null;
+                }
+            }
+        }
         Session nv = getSession(id);
         nv.setNameSession(updated.getNameSession());
         nv.setDescSession(updated.getDescSession());
