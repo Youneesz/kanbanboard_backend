@@ -19,7 +19,7 @@ public class SessionController {
         this.SessionService = SessionService;
     }
 
-    @PostMapping("/add")
+    @PostMapping(value ="/add")
     public String add(@RequestBody Session session) {
         if (SessionService.addSession(session) == null) {
             return "You already have a session with that name! Please change it to something else.";

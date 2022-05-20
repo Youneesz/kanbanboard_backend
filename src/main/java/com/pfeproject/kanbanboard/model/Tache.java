@@ -1,8 +1,13 @@
 package com.pfeproject.kanbanboard.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,23 +36,18 @@ public class Tache implements Serializable {
     @Column(name = "FINISH_DATE")
     private Date finishDate;
 
+    @JsonBackReference(value = "section-tasks")
     @ManyToOne
     @JoinColumn(name = "id_section")
     private Section section;
 
+    @ManyToMany(mappedBy = "tags_taches")
+    private List<Tag> taches_tags = new ArrayList<>();
+
+    @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "have", joinColumns = @JoinColumn(name = "ID_TASK"), inverseJoinColumns = @JoinColumn(name = "ID_TAG"))
-    private List<Tag> tags;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "taches")
-    private List<Utilisateur> users;
-
-    public Tache(String nameTask, String descriptionTask, String colorTask, List<Tag> tags) {
-        this.nameTask = nameTask;
-        this.descriptionTask = descriptionTask;
-        this.colorTask = colorTask;
-        this.tags = tags;
-    }
+    @JoinTable(name = "work_on", joinColumns = {@JoinColumn(name = "ID_TASK")}, inverseJoinColumns = {@JoinColumn(name = "ID_USER")})
+    private List<Utilisateur> meantForUsers = new ArrayList<>();
 
     public Tache() {
     }
@@ -90,5 +90,37 @@ public class Tache implements Serializable {
 
     public void setSection(Section section) {
         this.section = section;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public List<Tag> getTaches_tags() {
+        return taches_tags;
+    }
+
+    public void setTaches_tags(List<Tag> taches_tags) {
+        this.taches_tags = taches_tags;
+    }
+
+    public List<Utilisateur> getMeantForUsers() {
+        return meantForUsers;
+    }
+
+    public void setMeantForUsers(List<Utilisateur> meantForUsers) {
+        this.meantForUsers = meantForUsers;
     }
 }

@@ -26,6 +26,7 @@ public class SessionServiceImpl implements SessionService{
         if (sessionRepository.getSessionName(session.getNameSession(), session.getOwner().getIdUser()) != null)  {
             return null;
         }
+        //session.setUsers((Collection<Utilisateur>) session.getOwner());
         return sessionRepository.save(session);
     }
 

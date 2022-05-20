@@ -19,7 +19,7 @@ public class UtilisateurController {
         this.utilisateurService = utilisateurService;
     }
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add")
     public String add(@RequestBody Utilisateur user) {
         if (utilisateurService.addUser(user) == null) {
             return "Error, there is already a user using either same email or username.";

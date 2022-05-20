@@ -1,9 +1,10 @@
 package com.pfeproject.kanbanboard.model;
 
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,24 +24,24 @@ public class Session implements Serializable {
     @Column(name = "DESCRIPTION_SESSION")
     private String descSession;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
-    private List<Section> sections;
+    @Column(name="bg_color")
+    private String bgColor;
 
+    @JsonManagedReference(value = "session-section")
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    private List<Section> sections = new ArrayList<>();
+
+    @JsonBackReference(value = "owned-sessions")
     @ManyToOne
     @JoinColumn(name = "id_user")
     private Utilisateur owner;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "joins", joinColumns = @JoinColumn(name = "id_session"), inverseJoinColumns = @JoinColumn(name = "id_user"))
-    private List<Utilisateur> users;
+    private List<Utilisateur> users = new ArrayList<>();
 
     public Session() {}
-
-    public Session(Integer idSession, String nameSession, String descSession) {
-        this.idSession = idSession;
-        this.nameSession = nameSession;
-        this.descSession = descSession;
-    }
 
     public Integer getIdSession() {
         return idSession;
@@ -80,5 +81,21 @@ public class Session implements Serializable {
 
     public void setUsers(List<Utilisateur> users) {
         this.users = users;
+    }
+
+    public String getBgColor() {
+        return bgColor;
+    }
+
+    public void setBgColor(String bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public List<Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
     }
 }

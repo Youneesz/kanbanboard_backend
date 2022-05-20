@@ -29,7 +29,7 @@ public class TagController {
     public Tag update(@PathVariable int id, @RequestBody Tag tag) {
         Tag modified = tagService.getTag(id);
         modified.setNameTag(tag.getNameTag());
-        modified.setTaches(tag.getTaches());
+        modified.setTags_taches(tag.getTags_taches());
         return tagService.addTag(modified);
     }
 

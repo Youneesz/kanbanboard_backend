@@ -1,5 +1,10 @@
 package com.pfeproject.kanbanboard.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -18,9 +23,11 @@ public class Section implements Serializable {
     @Column(name = "NAME_SECTION", nullable = false)
     private String nameSection;
 
+    @JsonManagedReference(value = "section-tasks")
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Tache> taches;
 
+    @JsonBackReference(value = "session-section")
     @ManyToOne
     @JoinColumn(name = "id_session")
     private Session session;
@@ -61,14 +68,5 @@ public class Section implements Serializable {
 
     public void setSession(Session session) {
         this.session = session;
-    }
-
-    @Override
-    public String toString() {
-        return "Section{" +
-                "idSection=" + idSection +
-                ", nameSection='" + nameSection + '\'' +
-                ", session=" + session +
-                '}';
     }
 }

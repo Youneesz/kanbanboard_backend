@@ -1,11 +1,14 @@
 package com.pfeproject.kanbanboard.model;
 
+import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,24 +47,18 @@ public class Utilisateur implements Serializable, UserDetails {
     @Column(name = "PICTURE")
     private String pfp;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Session> session_user;
+    @JsonManagedReference(value = "owned-sessions")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Session> owned_sessions = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "work_on", joinColumns = {@JoinColumn(name = "ID_USER")}, inverseJoinColumns = {@JoinColumn(name = "ID_TASK")})
-    private List<Tache> taches;
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<Session> joined_sessions = new ArrayList<>();
+
+
+    @ManyToMany(mappedBy = "meantForUsers")
+    private List<Tache> taches = new ArrayList<>();
 
     public Utilisateur() {}
-
-    public Utilisateur(Date birthdate, Date joindate, String firstName, String lastName, String username, String email, String password) {
-        this.birthdate = birthdate;
-        this.joindate = joindate;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 
     public Integer getIdUser() {
         return idUser;
@@ -69,22 +66,6 @@ public class Utilisateur implements Serializable, UserDetails {
 
     public void setIdUser(Integer idUser) {
         this.idUser = idUser;
-    }
-
-    public Date getBIRTHDATE() {
-        return birthdate;
-    }
-
-    public void setBIRTHDATE(Date BIRTHDATE) {
-        this.birthdate = BIRTHDATE;
-    }
-
-    public Date getJOINDATE() {
-        return joindate;
-    }
-
-    public void setJOINDATE(Date JOINDATE) {
-        this.joindate = JOINDATE;
     }
 
     public String getFirstName() {
@@ -128,7 +109,53 @@ public class Utilisateur implements Serializable, UserDetails {
         this.password = password;
     }
 
+    public Date getBirthdate() {
+        return birthdate;
+    }
 
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public Date getJoindate() {
+        return joindate;
+    }
+
+    public void setJoindate(Date joindate) {
+        this.joindate = joindate;
+    }
+
+    public String getPfp() {
+        return pfp;
+    }
+
+    public void setPfp(String pfp) {
+        this.pfp = pfp;
+    }
+
+    public List<Session> getOwned_sessions() {
+        return owned_sessions;
+    }
+
+    public void setOwned_sessions(List<Session> owned_sessions) {
+        this.owned_sessions = owned_sessions;
+    }
+
+    public List<Session> getJoined_sessions() {
+        return joined_sessions;
+    }
+
+    public void setJoined_sessions(List<Session> joined_sessions) {
+        this.joined_sessions = joined_sessions;
+    }
+
+    public List<Tache> getTaches() {
+        return taches;
+    }
+
+    public void setTaches(List<Tache> taches) {
+        this.taches = taches;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

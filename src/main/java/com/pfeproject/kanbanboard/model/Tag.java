@@ -1,9 +1,13 @@
 package com.pfeproject.kanbanboard.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,22 +24,19 @@ public class Tag implements Serializable {
     @Column(name = "NAME_TAG", nullable = false)
     private String nameTag;
 
-    @ManyToMany(mappedBy = "tags")
-    private List<Tache> taches;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "have", joinColumns = @JoinColumn(name = "ID_TAG"), inverseJoinColumns = @JoinColumn(name = "ID_TASK"))
+    private List<Tache> tags_taches = new ArrayList<>();
 
     public Tag() {}
 
-    public Tag(String nameTag, List<Tache> taches) {
-        this.nameTag = nameTag;
-        this.taches = taches;
+    public List<Tache> getTags_taches() {
+        return tags_taches;
     }
 
-    public List<Tache> getTaches() {
-        return taches;
-    }
-
-    public void setTaches(List<Tache> taches) {
-        this.taches = taches;
+    public void setTags_taches(List<Tache> taches) {
+        this.tags_taches = taches;
     }
 
     public Integer getIdTag() {
@@ -52,13 +53,5 @@ public class Tag implements Serializable {
 
     public void setNameTag(String nameTag) {
         this.nameTag = nameTag;
-    }
-
-    @Override
-    public String toString() {
-        return "Tag{" +
-                "idTag=" + idTag +
-                ", nameTag='" + nameTag + '\'' +
-                '}';
     }
 }
