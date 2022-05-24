@@ -27,6 +27,16 @@ public class UtilisateurController {
         return "User added successfully.";
     }
 
+    @PostMapping("/join/{id_session}/{id_user}")
+    public String addUserToSession(@PathVariable int id_session, @PathVariable int id_user) {
+        return utilisateurService.addUserToSession(id_session, id_user);
+    }
+
+    @DeleteMapping("/leave/{id_session}/{id_user}")
+    public String removeUserFromSession(@PathVariable int id_session, @PathVariable int id_user) {
+        return utilisateurService.removeUserFromSession(id_session, id_user);
+    }
+
     @PutMapping("/update/{id}")
     public Utilisateur update(@PathVariable int id, @RequestBody Utilisateur nv) {
         return utilisateurService.updateUser(id, nv);

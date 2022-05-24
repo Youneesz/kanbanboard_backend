@@ -24,6 +24,9 @@ public class Tag implements Serializable {
     @Column(name = "NAME_TAG", nullable = false)
     private String nameTag;
 
+    @Column(name = "bg_color")
+    private String tagColor;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "have", joinColumns = @JoinColumn(name = "ID_TAG"), inverseJoinColumns = @JoinColumn(name = "ID_TASK"))
@@ -53,5 +56,13 @@ public class Tag implements Serializable {
 
     public void setNameTag(String nameTag) {
         this.nameTag = nameTag;
+    }
+
+    public String getTagColor() {
+        return tagColor;
+    }
+
+    public void setTagColor(String tagColor) {
+        this.tagColor = tagColor;
     }
 }

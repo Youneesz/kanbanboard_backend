@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "session")
@@ -39,7 +41,7 @@ public class Session implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "joins", joinColumns = @JoinColumn(name = "id_session"), inverseJoinColumns = @JoinColumn(name = "id_user"))
-    private List<Utilisateur> users = new ArrayList<>();
+    private Set<Utilisateur> users = new HashSet<>();
 
     public Session() {}
 
@@ -75,11 +77,11 @@ public class Session implements Serializable {
         this.owner = owner;
     }
 
-    public List<Utilisateur> getUsers() {
+    public Set<Utilisateur> getUsers() {
         return users;
     }
 
-    public void setUsers(List<Utilisateur> users) {
+    public void setUsers(Set<Utilisateur> users) {
         this.users = users;
     }
 
@@ -97,5 +99,18 @@ public class Session implements Serializable {
 
     public void setSections(List<Section> sections) {
         this.sections = sections;
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "idSession=" + idSession +
+                ", nameSession='" + nameSession + '\'' +
+                ", descSession='" + descSession + '\'' +
+                ", bgColor='" + bgColor + '\'' +
+                ", sections=" + sections +
+                ", owner=" + owner +
+                ", users=" + users +
+                '}';
     }
 }

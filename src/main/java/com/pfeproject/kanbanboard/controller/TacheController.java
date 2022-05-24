@@ -28,6 +28,26 @@ public class TacheController {
         return tacheService.updateTache(id, task);
     }
 
+    @PostMapping("/addtag/{id_task}/{id_tag}")
+    public String addTagToTask(@PathVariable int id_task, @PathVariable int id_tag) {
+        return tacheService.addTagToTask(id_task, id_tag);
+    }
+
+    @DeleteMapping("/removetag/{id_task}/{id_tag}")
+    public String removeTagFromTask(@PathVariable int id_task, @PathVariable int id_tag) {
+        return tacheService.removeTagToTask(id_task, id_tag);
+    }
+
+    @PostMapping("/addusers/{id_user}/{id_task}")
+    public String addUserFromTask(@PathVariable int id_user, @PathVariable int id_task) {
+        return tacheService.assignTask(id_user, id_task);
+    }
+
+    @DeleteMapping("/removeusers/{id_user}/{id_task}")
+    public String removeUserFromTask(@PathVariable int id_user, @PathVariable int id_task) {
+        return tacheService.unassignTask(id_user, id_task);
+    }
+
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable int id) {
         return tacheService.deleteTache(id);

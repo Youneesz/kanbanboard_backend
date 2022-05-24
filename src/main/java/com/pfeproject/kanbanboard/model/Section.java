@@ -23,6 +23,9 @@ public class Section implements Serializable {
     @Column(name = "NAME_SECTION", nullable = false)
     private String nameSection;
 
+    @Column(name="bg_color")
+    private String sectionColor;
+
     @JsonManagedReference(value = "section-tasks")
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Tache> taches;
@@ -33,6 +36,14 @@ public class Section implements Serializable {
     private Session session;
 
     public Section() {}
+
+    public String getSectionColor() {
+        return sectionColor;
+    }
+
+    public void setSectionColor(String sectionColor) {
+        this.sectionColor = sectionColor;
+    }
 
     public Section(String nameSection) {
         this.nameSection = nameSection;

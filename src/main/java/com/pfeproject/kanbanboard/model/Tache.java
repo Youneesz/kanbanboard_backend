@@ -8,7 +8,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tache")
@@ -42,12 +44,12 @@ public class Tache implements Serializable {
     private Section section;
 
     @ManyToMany(mappedBy = "tags_taches")
-    private List<Tag> taches_tags = new ArrayList<>();
+    private Set<Tag> taches_tags = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "work_on", joinColumns = {@JoinColumn(name = "ID_TASK")}, inverseJoinColumns = {@JoinColumn(name = "ID_USER")})
-    private List<Utilisateur> meantForUsers = new ArrayList<>();
+    private Set<Utilisateur> meantForUsers = new HashSet<>();
 
     public Tache() {
     }
@@ -108,19 +110,19 @@ public class Tache implements Serializable {
         this.finishDate = finishDate;
     }
 
-    public List<Tag> getTaches_tags() {
+    public Set<Tag> getTaches_tags() {
         return taches_tags;
     }
 
-    public void setTaches_tags(List<Tag> taches_tags) {
+    public void setTaches_tags(Set<Tag> taches_tags) {
         this.taches_tags = taches_tags;
     }
 
-    public List<Utilisateur> getMeantForUsers() {
+    public Set<Utilisateur> getMeantForUsers() {
         return meantForUsers;
     }
 
-    public void setMeantForUsers(List<Utilisateur> meantForUsers) {
+    public void setMeantForUsers(Set<Utilisateur> meantForUsers) {
         this.meantForUsers = meantForUsers;
     }
 }

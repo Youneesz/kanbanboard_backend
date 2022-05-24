@@ -12,4 +12,10 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
     @Query(value = "select * from Utilisateur where USERNAME = :username", nativeQuery = true)
     Utilisateur getUserByUsername(@Param("username") String username);
 
+    @Query(value = "select username from Utilisateur", nativeQuery = true)
+    List<Utilisateur> getUsernames();
+
+    @Query(value = "select * from Utilisateur where USERNAME = ?1 and PASSWORD = ?2", nativeQuery = true)
+    Utilisateur getUserLogin(String username, String password);
+
 }

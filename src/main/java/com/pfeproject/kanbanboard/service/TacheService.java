@@ -10,4 +10,8 @@ public interface TacheService {
     public String deleteTache(int id);
     public Tache getTache(int id);
     public List<Tache> getTaches();
+    public String addTagToTask(int id_task, int id_tag);
+    public String removeTagToTask(int id_task, int id_tag);
+    public String assignTask(int id_user, int id_task);
+    public String unassignTask(int id_user, int id_task);
 }

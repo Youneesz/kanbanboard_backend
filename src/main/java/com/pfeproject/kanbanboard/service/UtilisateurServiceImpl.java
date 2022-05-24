@@ -2,9 +2,11 @@ package com.pfeproject.kanbanboard.service;
 
 import com.pfeproject.kanbanboard.model.Session;
 import com.pfeproject.kanbanboard.model.Tache;
+import com.pfeproject.kanbanboard.model.Tag;
 import com.pfeproject.kanbanboard.model.Utilisateur;
 import com.pfeproject.kanbanboard.repository.SessionRepository;
 import com.pfeproject.kanbanboard.repository.TacheRepository;
+import com.pfeproject.kanbanboard.repository.TagRepository;
 import com.pfeproject.kanbanboard.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final SessionRepository sessionRepository;
     @Autowired
     private final TacheRepository tacheRepository;
+    @Autowired
+    private final TagRepository tagRepository;
 
-    public UtilisateurServiceImpl(UtilisateurRepository utilisateurRepository, SessionRepository sessionRepository, TacheRepository tacheRepository) {
+    public UtilisateurServiceImpl(UtilisateurRepository utilisateurRepository, SessionRepository sessionRepository, TacheRepository tacheRepository, TagRepository tagRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.sessionRepository = sessionRepository;
         this.tacheRepository = tacheRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -54,11 +59,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         util.setUsername(updated.getUsername());
         util.setPassword(updated.getPassword());
         util.setJoindate(updated.getJoindate());
-        util.getJoined_sessions().addAll(updated.getJoined_sessions().stream().map(e -> {
-            Session session = sessionRepository.findById(e.getIdSession()).orElseThrow(RuntimeException::new);
-            session.getUsers().add(util);
-            return session;
-        }).toList());
         //add condition to restrict task assignments to only the session members
         //add condition to make the owner assign tasks
         util.getTaches().addAll(updated.getTaches().stream().map(e -> {
@@ -67,6 +67,33 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return task;
         }).toList());
         return utilisateurRepository.save(util);
+    }
+
+    @Override
+    public String addUserToSession(int id_session, int id_user){
+        Utilisateur util = utilisateurRepository.findById(id_user).orElseThrow(RuntimeException::new);
+        Session ses = sessionRepository.findById(id_session).orElseThrow(RuntimeException::new);
+        if (util.getJoined_sessions().stream().noneMatch(e -> Objects.equals(e.getIdSession(), ses.getIdSession())) && ses.getUsers().stream().noneMatch(e -> e.getIdUser().equals(util.getIdUser())))
+        {
+            ses.getUsers().add(util);
+            util.getJoined_sessions().add(ses);
+            utilisateurRepository.save(util);
+            return "User " + util.getUsername() + " has been added to " + ses.getNameSession();
+        }
+        return "Error, user already in session.";
+    }
+
+    @Override
+    public String removeUserFromSession(int id_session, int id_user) {
+        Session ses = sessionRepository.findById(id_session).orElseThrow(RuntimeException::new);
+        Utilisateur us = utilisateurRepository.findById(id_user).orElseThrow(RuntimeException::new);
+        if (ses.getUsers().stream().noneMatch(e -> e.getIdUser() == id_user)) {
+            return "Error, user doesn't belong to the session";
+        }
+        us.getJoined_sessions().remove(ses);
+        ses.getUsers().remove(us);
+        sessionRepository.save(ses);
+        return "User removed from session successfully";
     }
 
     @Override

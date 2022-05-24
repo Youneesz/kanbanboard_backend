@@ -1,20 +1,17 @@
 package com.pfeproject.kanbanboard.model;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "utilisateur")
-public class Utilisateur implements Serializable, UserDetails {
+public class Utilisateur implements Serializable /*, UserDetails*/ {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,11 +49,11 @@ public class Utilisateur implements Serializable, UserDetails {
     private List<Session> owned_sessions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<Session> joined_sessions = new ArrayList<>();
+    private Set<Session> joined_sessions = new HashSet<>();
 
 
     @ManyToMany(mappedBy = "meantForUsers")
-    private List<Tache> taches = new ArrayList<>();
+    private Set<Tache> taches = new HashSet<>();
 
     public Utilisateur() {}
 
@@ -84,7 +81,6 @@ public class Utilisateur implements Serializable, UserDetails {
         this.lastName = lastName;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
@@ -100,7 +96,6 @@ public class Utilisateur implements Serializable, UserDetails {
         this.email = email;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -141,23 +136,23 @@ public class Utilisateur implements Serializable, UserDetails {
         this.owned_sessions = owned_sessions;
     }
 
-    public List<Session> getJoined_sessions() {
+    public Set<Session> getJoined_sessions() {
         return joined_sessions;
     }
 
-    public void setJoined_sessions(List<Session> joined_sessions) {
+    public void setJoined_sessions(Set<Session> joined_sessions) {
         this.joined_sessions = joined_sessions;
     }
 
-    public List<Tache> getTaches() {
+    public Set<Tache> getTaches() {
         return taches;
     }
 
-    public void setTaches(List<Tache> taches) {
+    public void setTaches(Set<Tache> taches) {
         this.taches = taches;
     }
 
-    @Override
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
@@ -179,7 +174,7 @@ public class Utilisateur implements Serializable, UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
-    }
+    }*/
 
 
 

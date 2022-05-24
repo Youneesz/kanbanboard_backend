@@ -55,12 +55,68 @@ public class TacheServiceImpl implements TacheService {
             user.getTaches().add(nv);
             return user;
         }).toList());*/
-        nv.getTaches_tags().addAll(updated.getTaches_tags().stream().map(e -> {
+        /*nv.getTaches_tags().addAll(updated.getTaches_tags().stream().map(e -> {
             Tag tag = tagRepository.findById(e.getIdTag()).orElseThrow(RuntimeException::new);
             tag.getTags_taches().add(nv);
             return tag;
-        }).toList());
+        }).toList());*/
         return tacheRepository.save(nv);
+    }
+
+    @Override
+    public String assignTask(int id_user, int id_task) {
+        Tache task = tacheRepository.findById(id_task).orElseThrow(RuntimeException::new);
+        Utilisateur us = utilisateurRepository.findById(id_user).orElseThrow(RuntimeException::new);
+
+        if (task.getMeantForUsers().contains(us) || us.getTaches().contains(task)) {
+            return "Error, user already working on that task.";
+        }
+
+        task.getMeantForUsers().add(us);
+        us.getTaches().add(task);
+        tacheRepository.save(task);
+        return "User added to task successfully";
+    }
+
+    @Override
+    public String unassignTask(int id_user, int id_task) {
+        Tache task = tacheRepository.findById(id_task).orElseThrow(RuntimeException::new);
+        Utilisateur us = utilisateurRepository.findById(id_user).orElseThrow(RuntimeException::new);
+
+        if (task.getMeantForUsers().contains(us) && us.getTaches().contains(task)) {
+            task.getMeantForUsers().remove(us);
+            us.getTaches().remove(task);
+            tacheRepository.save(task);
+            return "User removed from task successfully";
+        }
+
+        return "Error, user isn't working on that task.";
+    }
+
+    @Override
+    public String addTagToTask(int id_task, int id_tag) {
+        Tache task = tacheRepository.findById(id_task).orElseThrow(RuntimeException::new);
+        Tag tag = tagRepository.findById(id_tag).orElseThrow(RuntimeException::new);
+        if (task.getTaches_tags().contains(tag) || tag.getTags_taches().contains(task)) {
+            return "Error! Task already has that tag.";
+        }
+        tag.getTags_taches().add(task);
+        task.getTaches_tags().add(tag);
+        tacheRepository.save(task);
+        return "Tag added to task successfully.";
+    }
+
+    @Override
+    public String removeTagToTask(int id_task, int id_tag) {
+        Tache task = tacheRepository.findById(id_task).orElseThrow(RuntimeException::new);
+        Tag tag = tagRepository.findById(id_tag).orElseThrow(RuntimeException::new);
+        if (task.getTaches_tags().contains(tag) && tag.getTags_taches().contains(task)) {
+            tag.getTags_taches().remove(task);
+            task.getTaches_tags().remove(tag);
+            tacheRepository.save(task);
+            return "Tag removed";
+        }
+        return "Error, task doesn't have that tag";
     }
 
     @Override
