@@ -20,12 +20,12 @@ public class LoginController
         this.loginService = loginService;
     }
 
-    @GetMapping("/")
+    @PostMapping("/")
     public Utilisateur login(@RequestBody Map<String ,String> body) {
         return loginService.userLogin(body.get("username"), body.get("password"));
     }
 
-    @GetMapping("/resetpassword")
+    @PostMapping("/resetpassword")
     public String resetPassword(@RequestBody Map<String ,String> body) {
         return loginService.resetPassEmail(body.get("email"), "Password reset", "testing password reset");
     }
