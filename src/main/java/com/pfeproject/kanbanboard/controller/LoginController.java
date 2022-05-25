@@ -1,5 +1,6 @@
 package com.pfeproject.kanbanboard.controller;
 
+import com.pfeproject.kanbanboard.model.Utilisateur;
 import com.pfeproject.kanbanboard.service.LoginService;
 import com.pfeproject.kanbanboard.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class LoginController
     }
 
     @GetMapping("/")
-    public String login(@RequestBody Map<String ,String> body) {
+    public Utilisateur login(@RequestBody Map<String ,String> body) {
         return loginService.userLogin(body.get("username"), body.get("password"));
     }
 

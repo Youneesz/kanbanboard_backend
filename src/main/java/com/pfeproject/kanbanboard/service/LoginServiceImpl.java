@@ -1,5 +1,6 @@
 package com.pfeproject.kanbanboard.service;
 
+import com.pfeproject.kanbanboard.model.Utilisateur;
 import com.pfeproject.kanbanboard.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,11 +21,8 @@ public class LoginServiceImpl implements LoginService{
     }
 
     @Override
-    public String userLogin(String username, String password) {
-        if (utilisateurRepository.getUserLogin(username, password) == null)  {
-            return "Error! Username or password doesn't exist.";
-        }
-        return "Welcome";
+    public Utilisateur userLogin(String username, String password) {
+        return utilisateurRepository.getUserLogin(username, password);
     }
 
     @Override
