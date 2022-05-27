@@ -61,11 +61,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         util.setJoindate(updated.getJoindate());
         //add condition to restrict task assignments to only the session members
         //add condition to make the owner assign tasks
-        util.getTaches().addAll(updated.getTaches().stream().map(e -> {
+        /*util.getTaches().addAll(updated.getTaches().stream().map(e -> {
             Tache task = tacheRepository.findById(e.getIdTask()).orElseThrow(RuntimeException::new);
             task.getMeantForUsers().add(util);
             return task;
-        }).toList());
+        }).toList());*/
         return utilisateurRepository.save(util);
     }
 

@@ -43,14 +43,14 @@ public class SectionServiceImpl implements SectionService{
 
     @Override
     public Section updateSection(int id, Section updated) {
-        List<Section> sections = sectionRepository.getSectionsBySession(getSection(id).getSession().getIdSession());
+        /*List<Section> sections = sectionRepository.getSectionsBySession(getSection(id).getSession().getIdSession());
         for (Section sec:sections) {
             if (sec.getIdSection() != id) {
                 if (Objects.equals(sec.getNameSection(), updated.getNameSection())) {
                     return null;
                 }
             }
-        }
+        }*/
         Section nv = getSection(id);
         nv.setNameSection(updated.getNameSection());
         nv.setSession(updated.getSession());
