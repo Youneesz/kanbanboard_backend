@@ -26,7 +26,8 @@ public class SectionController {
 
     @PutMapping("/update/{id}")
     public String update(@PathVariable int id, @RequestBody Section input) {
-        if (sectionService.updateSection(id, input) == null) {
+        Section sec = sectionService.updateSection(id, input);
+        if (sec == null) {
             return "Error, couldn't update section, please recheck.";
         }
         return "Section updated successfully.";
