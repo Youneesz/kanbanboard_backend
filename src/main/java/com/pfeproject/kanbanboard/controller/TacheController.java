@@ -1,6 +1,7 @@
 package com.pfeproject.kanbanboard.controller;
 
 import com.pfeproject.kanbanboard.model.Tache;
+import com.pfeproject.kanbanboard.repository.TacheRepository;
 import com.pfeproject.kanbanboard.service.TacheService;
 import com.pfeproject.kanbanboard.service.TacheServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.List;
 @CrossOrigin
 public class TacheController {
     private final TacheService tacheService;
+    private final TacheRepository tacheRepository;
 
-    public TacheController(TacheServiceImpl tacheService) {
+    public TacheController(TacheServiceImpl tacheService, TacheRepository tacheRepository) {
         this.tacheService = tacheService;
+        this.tacheRepository = tacheRepository;
     }
 
     @PostMapping("/add")
@@ -61,5 +64,10 @@ public class TacheController {
     @GetMapping("/getall")
     public List<Tache> getall() {
         return tacheService.getTaches();
+    }
+
+    @GetMapping("/gettaskusers/{id}")
+    public List<String> getTaskUsers(@PathVariable int id) {
+        return tacheRepository.getTaskUsers(id);
     }
 }

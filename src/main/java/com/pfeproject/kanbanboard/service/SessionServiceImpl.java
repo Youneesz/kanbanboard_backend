@@ -26,7 +26,6 @@ public class SessionServiceImpl implements SessionService{
         if (sessionRepository.getSessionName(session.getNameSession(), session.getOwner().getIdUser()) != null)  {
             return null;
         }
-        //session.setUsers((Collection<Utilisateur>) session.getOwner());
         return sessionRepository.save(session);
     }
 
@@ -66,5 +65,10 @@ public class SessionServiceImpl implements SessionService{
     @Override
     public List<Session> getOwnerSessions(int id) {
         return sessionRepository.getOwnerSessions(id);
+    }
+
+    @Override
+    public int getCountUsersBySession(int id) {
+        return sessionRepository.getCountUsersBySession(id);
     }
 }

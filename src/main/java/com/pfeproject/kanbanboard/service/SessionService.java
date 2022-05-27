@@ -11,4 +11,5 @@ public interface SessionService {
     public Session getSession(int id);
     public List<Session> getSessions();
     public List<Session> getOwnerSessions(int id);
+    public int getCountUsersBySession(int id);
 }

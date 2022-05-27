@@ -49,4 +49,9 @@ public class SessionController {
 
     @GetMapping("/getall/{id}")
     public List<Session> getOwnerSessions(@PathVariable int id) {return SessionService.getOwnerSessions(id);}
+
+    @GetMapping("/getcount/{id}")
+    public int getUsersCount(@PathVariable int id) {
+        return SessionService.getCountUsersBySession(id);
+    }
 }

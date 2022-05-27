@@ -14,4 +14,7 @@ public interface SessionRepository extends JpaRepository<Session, Integer>, JpaS
 
     @Query(value = "select * from Session where NAME_SESSION = ?1 and ID_USER = ?2", nativeQuery = true)
     Session getSessionName(String name, int id);
+
+    @Query(value = "select count(*) from SESSION a INNER JOIN JOINS b ON a.id_session = b.id_session where a.id_session = ?1", nativeQuery = true)
+    int getCountUsersBySession(int id);
 }
