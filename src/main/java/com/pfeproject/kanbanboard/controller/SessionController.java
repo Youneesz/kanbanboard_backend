@@ -1,12 +1,15 @@
 package com.pfeproject.kanbanboard.controller;
 
 import com.pfeproject.kanbanboard.model.Session;
+import com.pfeproject.kanbanboard.repository.SessionRepository;
 import com.pfeproject.kanbanboard.service.SessionService;
 import com.pfeproject.kanbanboard.service.SessionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sessions")
@@ -14,9 +17,12 @@ import java.util.List;
 public class SessionController {
     @Autowired
     private final SessionService SessionService;
+    @Autowired
+    private final SessionRepository sessionRepository;
 
-    public SessionController(SessionServiceImpl SessionService) {
+    public SessionController(SessionServiceImpl SessionService, SessionRepository sessionRepository) {
         this.SessionService = SessionService;
+        this.sessionRepository = sessionRepository;
     }
 
     @PostMapping(value ="/add")
@@ -53,5 +59,10 @@ public class SessionController {
     @GetMapping("/getcount/{id}")
     public int getUsersCount(@PathVariable int id) {
         return SessionService.getCountUsersBySession(id);
+    }
+
+    @GetMapping("getsessionusers/{id_session}")
+    public List<Map<Integer, String>> getSessionMembersByIdAndUsernames(@PathVariable int id_session) {
+        return sessionRepository.getSessionMembersByIdAndUsernames(id_session);
     }
 }
