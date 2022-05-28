@@ -7,6 +7,7 @@ import com.pfeproject.kanbanboard.service.TacheServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tasks")
@@ -67,7 +68,7 @@ public class TacheController {
     }
 
     @GetMapping("/gettaskusers/{id}")
-    public List<String> getTaskUsers(@PathVariable int id) {
+    public List<Map<Integer, String>> getTaskUsers(@PathVariable int id) {
         return tacheRepository.getTaskUsers(id);
     }
 }
