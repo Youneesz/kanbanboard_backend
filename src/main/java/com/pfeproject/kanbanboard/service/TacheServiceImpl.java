@@ -47,9 +47,10 @@ public class TacheServiceImpl implements TacheService {
         Tache nv = getTache(id);
         nv.setNameTask(updated.getNameTask());
         nv.setDescriptionTask(updated.getDescriptionTask());
-        nv.setSection(updated.getSection());
         nv.setColorTask(updated.getColorTask());
         nv.setSection(updated.getSection());
+        nv.setStartDate(updated.getStartDate());
+        nv.setFinishDate(updated.getFinishDate());
         /*nv.getMeantForUsers().addAll(updated.getMeantForUsers().stream().map(e -> {
             Utilisateur user = utilisateurRepository.findById(e.getIdUser()).orElseThrow(RuntimeException::new);
             user.getTaches().add(nv);
