@@ -78,6 +78,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             ses.getUsers().add(util);
             util.getJoined_sessions().add(ses);
             utilisateurRepository.save(util);
+            sessionRepository.save(ses);
             return "User " + util.getUsername() + " has been added to " + ses.getNameSession();
         }
         return "Error, user already in session.";
