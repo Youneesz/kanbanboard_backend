@@ -42,6 +42,7 @@ public class SessionServiceImpl implements SessionService{
         Session nv = getSession(id);
         nv.setNameSession(updated.getNameSession());
         nv.setDescSession(updated.getDescSession());
+        nv.setBgColor(updated.getBgColor());
         nv.setOwner(updated.getOwner());
         return sessionRepository.save(nv);
     }
