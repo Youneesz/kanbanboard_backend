@@ -45,7 +45,7 @@ public class Utilisateur implements Serializable /*, UserDetails*/ {
     private String pfp;
 
     @Column(name = "bg_color")
-    private String bg_color;
+    private String bgColor;
 
     @JsonManagedReference(value = "owned-sessions")
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
@@ -156,11 +156,11 @@ public class Utilisateur implements Serializable /*, UserDetails*/ {
     }
 
     public String getBg_color() {
-        return bg_color;
+        return bgColor;
     }
 
     public void setBg_color(String bg_color) {
-        this.bg_color = bg_color;
+        this.bgColor = bg_color;
     }
 
     /*@Override
