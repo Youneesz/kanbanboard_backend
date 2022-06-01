@@ -59,6 +59,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         util.setUsername(updated.getUsername());
         util.setPassword(updated.getPassword());
         util.setJoindate(updated.getJoindate());
+        util.setBg_color(updated.getBg_color());
         //add condition to restrict task assignments to only the session members
         //add condition to make the owner assign tasks
         /*util.getTaches().addAll(updated.getTaches().stream().map(e -> {
