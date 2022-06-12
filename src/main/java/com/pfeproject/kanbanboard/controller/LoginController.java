@@ -30,8 +30,11 @@ public class LoginController
         return loginService.userLogin(body.get("username"), body.get("password"));
     }
 
-    @PostMapping("/resetpassword/{id}")
-    public String resetPassword(@PathVariable int id) {
-        return loginService.resetPassEmail(utilisateurRepository.findById(id).orElseThrow(RuntimeException::new).getEmail(), "Resetting your password.", "Click on this link to reset your password : http://localhost:3000/resetPassword/" + id);
+    @PostMapping("/resetpassword")
+    public String resetPassword(@RequestBody Map<String, String> body) {
+        if (utilisateurRepository.findAll().stream().anyMatch(e -> e.getEmail().equals(body.get("email")))) {
+            return loginService.resetPassEmail(body.get("email"), "Resetting your password.", "Click on this link to reset your password : http://localhost:3000/resetPassword/" + utilisateurRepository.getIdByEmail(body.get("email")));
+        }
+        return "Email doesn't exist in database.";
     }
 }
