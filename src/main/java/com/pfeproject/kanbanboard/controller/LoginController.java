@@ -1,6 +1,7 @@
 package com.pfeproject.kanbanboard.controller;
 
 import com.pfeproject.kanbanboard.model.Utilisateur;
+import com.pfeproject.kanbanboard.repository.UtilisateurRepository;
 import com.pfeproject.kanbanboard.service.LoginService;
 import com.pfeproject.kanbanboard.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,13 @@ public class LoginController
 {
     @Autowired
     private final LoginService loginService;
+    @Autowired
+    private final UtilisateurRepository utilisateurRepository;
 
-    public LoginController(LoginServiceImpl loginService) {
+
+    public LoginController(LoginServiceImpl loginService, UtilisateurRepository utilisateurRepository) {
         this.loginService = loginService;
+        this.utilisateurRepository = utilisateurRepository;
     }
 
     @PostMapping("/")
@@ -25,8 +30,8 @@ public class LoginController
         return loginService.userLogin(body.get("username"), body.get("password"));
     }
 
-    @PostMapping("/resetpassword")
-    public String resetPassword(@RequestBody Map<String ,String> body) {
-        return loginService.resetPassEmail(body.get("email"), "Password reset", "testing password reset");
+    @PostMapping("/resetpassword/{id}")
+    public String resetPassword(@PathVariable int id) {
+        return loginService.resetPassEmail(utilisateurRepository.findById(id).orElseThrow(RuntimeException::new).getEmail(), "Resetting your password.", "Click on this link to reset your password : http://localhost:3000/resetPassword/" + id);
     }
 }
