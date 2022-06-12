@@ -31,10 +31,11 @@ public class LoginController
     }
 
     @PostMapping("/resetpassword")
-    public String resetPassword(@RequestBody Map<String, String> body) {
+    public Boolean resetPassword(@RequestBody Map<String, String> body) {
         if (utilisateurRepository.findAll().stream().anyMatch(e -> e.getEmail().equals(body.get("email")))) {
-            return loginService.resetPassEmail(body.get("email"), "Resetting your password.", "Click on this link to reset your password : http://localhost:3000/resetPassword/" + utilisateurRepository.getIdByEmail(body.get("email")));
+            loginService.resetPassEmail(body.get("email"), "Réinitialiser votre mot de passe.", "Clicker sur le lien suivant afin de réinitializer votre mot de passe : http://localhost:3000/resetPassword/" + utilisateurRepository.getIdByEmail(body.get("email")));
+            return true;
         }
-        return "Email doesn't exist in database.";
+        return false;
     }
 }
