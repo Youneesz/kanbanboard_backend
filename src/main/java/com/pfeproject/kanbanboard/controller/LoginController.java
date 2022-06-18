@@ -38,4 +38,9 @@ public class LoginController
         }
         return false;
     }
+
+    @GetMapping("/")
+    public String welcome() {
+        return "Welcome to the backend";
+    }
 }
