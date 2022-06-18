@@ -41,9 +41,6 @@ public class TacheServiceImpl implements TacheService {
 
     @Override
     public Tache updateTache(int id, Tache updated) {
-        /*if (sectionRepository.findAll().stream().noneMatch(e -> e.getIdSection() == updated.getSection().getIdSection())) {
-            return null;
-        }*/
         Tache nv = getTache(id);
         nv.setNameTask(updated.getNameTask());
         nv.setDescriptionTask(updated.getDescriptionTask());
@@ -51,16 +48,6 @@ public class TacheServiceImpl implements TacheService {
         nv.setSection(updated.getSection());
         nv.setStartDate(updated.getStartDate());
         nv.setFinishDate(updated.getFinishDate());
-        /*nv.getMeantForUsers().addAll(updated.getMeantForUsers().stream().map(e -> {
-            Utilisateur user = utilisateurRepository.findById(e.getIdUser()).orElseThrow(RuntimeException::new);
-            user.getTaches().add(nv);
-            return user;
-        }).toList());*/
-        /*nv.getTaches_tags().addAll(updated.getTaches_tags().stream().map(e -> {
-            Tag tag = tagRepository.findById(e.getIdTag()).orElseThrow(RuntimeException::new);
-            tag.getTags_taches().add(nv);
-            return tag;
-        }).toList());*/
         return tacheRepository.save(nv);
     }
 
